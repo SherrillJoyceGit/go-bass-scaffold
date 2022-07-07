@@ -1,0 +1,29 @@
+db:
+  baa:
+    dbType: postgres
+    dbName: postgres
+    user: postgres
+    password: postgres
+    host: 127.0.0.1
+    port: 5432
+  foo:
+    dbType: postgres
+    dbName: postgres
+    user: postgres
+    password: postgres
+    host: 127.0.0.1
+    port: 5432
+
+redis:
+  addr: 127.0.0.1:6379
+  password: 123456
+  db: 1
+
+log:
+  net: tcp
+  host: 127.0.0.1:5506
+  serviceId: service-bass
+
+server:
+  contextPath: /
+
