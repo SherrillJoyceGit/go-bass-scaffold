@@ -7,7 +7,9 @@ import (
 )
 
 func InitRestApi() *fiber.App {
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		DisableStartupMessage: true,
+	})
 
 	app.Use(cors.New())
 
