@@ -1,4 +1,4 @@
-package middle
+package cache
 
 import (
 	"github.com/SherrillJoyceGit/go-bass-scaffold/config"
@@ -7,19 +7,23 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var RedisClient *redis.Client
+var redisClient *redis.Client
 
-func init() {
+func RedisClientCurrent() *redis.Client {
+	return redisClient
+}
 
-	RedisClient = redis.NewClient(&redis.Options{
+func NewRedisClient() (*redis.Client, error) {
+
+	client := redis.NewClient(&redis.Options{
 		Addr:     config.AuthRedisConfig.Addr,
 		Password: config.AuthRedisConfig.Password, // no password set
 		DB:       config.AuthRedisConfig.Db,       // use default DB
 	})
 
-	_, err := RedisClient.Ping().Result()
+	_, connErr := client.Ping().Result()
 
-	if err != nil {
+	if connErr != nil {
 		//panic("connect to redis failed！！！")
 		logger.LoggerCurrent().WithFields(logrus.Fields{
 			"method": "redis-auth-connect",
@@ -30,4 +34,7 @@ func init() {
 			"method": "redis-auth-connect",
 		}).Infof("connect to " + config.AuthRedisConfig.Addr + " for redis is ok")
 	}
+
+	redisClient = client
+	return client, connErr
 }
