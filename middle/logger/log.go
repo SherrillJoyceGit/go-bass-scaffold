@@ -10,17 +10,16 @@ import (
 	"time"
 )
 
-/*type bodyLogWriter struct {
-	gin.ResponseWriter
-	body *bytes.Buffer
-}*/
+var currentLog *logrus.Logger
 
-/*func (w bodyLogWriter) Write(b []byte) (int, error) {
-	w.body.Write(b)
-	return w.ResponseWriter.Write(b)
-}*/
+// 返回当前的日志记录器，默认为LogrusLogger
+func LoggerCurrent() *logrus.Logger {
+	if currentLog == nil {
+		NewLogrusLogger()
+	}
 
-var Log *logrus.Logger
+	return currentLog
+}
 
 func NewLogrusLogger() fiber.Handler {
 
@@ -57,7 +56,7 @@ func NewLogrusLogger() fiber.Handler {
 		"method": "log-logstash-connect",
 	}).Infof("connect to " + config.LogStashConfig.Host + " for logstash is ok")
 
-	Log = log
+	currentLog = log
 	// 默认记录出入参，并限定业务接口
 	return func(c *fiber.Ctx) error {
 		// 请求开始时间
@@ -96,7 +95,7 @@ func NewLogrusLogger() fiber.Handler {
 
 		if (!strings.Contains(reqUrl, "/swagger/")) && (!strings.Contains(reqUrl, "/health")) {
 			if strings.Contains(responseBody, "error") {
-				Log.WithFields(logrus.Fields{
+				currentLog.WithFields(logrus.Fields{
 					"method":      reqUrl,
 					"latencyTime": latencyTime,
 					"reqMethod":   reqMethod,
@@ -105,7 +104,7 @@ func NewLogrusLogger() fiber.Handler {
 					"result":      responseBody,
 				}).Error(chainErr)
 			} else {
-				Log.WithFields(logrus.Fields{
+				currentLog.WithFields(logrus.Fields{
 					"method":      reqUrl,
 					"latencyTime": latencyTime,
 					"reqMethod":   reqMethod,

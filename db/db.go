@@ -22,7 +22,7 @@ func init() {
 
 	if err != nil {
 		//log.Fatal(2, "Fail to get section 'database': %v", err)
-		logger.Log.Fatal("Fail to get section 'database': " + err.Error())
+		logger.LoggerCurrent().Fatal("Fail to get section 'database': " + err.Error())
 	}
 
 	dbType = config.DbConfig.DbType
@@ -37,7 +37,7 @@ func init() {
 	Cloud, err = gorm.Open(dbType, ds)
 
 	if err != nil {
-		logger.Log.WithFields(logrus.Fields{
+		logger.LoggerCurrent().WithFields(logrus.Fields{
 			"method": "cloud-connect",
 		}).Panicln("connect to " + config.DbConfig.Host + " failed,err: " + err.Error())
 
@@ -49,7 +49,7 @@ func init() {
 	Cloud.DB().SetMaxIdleConns(10)
 	Cloud.DB().SetMaxOpenConns(100)
 
-	logger.Log.WithFields(logrus.Fields{
+	logger.LoggerCurrent().WithFields(logrus.Fields{
 		"method": "db-cloud-connect",
 	}).Infof("connect to " + config.DbConfig.Host + " for " + config.DbConfig.DbName + " is ok")
 }

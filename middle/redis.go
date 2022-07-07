@@ -21,12 +21,12 @@ func init() {
 
 	if err != nil {
 		//panic("connect to redis failed！！！")
-		logger.Log.WithFields(logrus.Fields{
+		logger.LoggerCurrent().WithFields(logrus.Fields{
 			"method": "redis-auth-connect",
 		}).Panic("connect to " + config.AuthRedisConfig.Addr + " for redis failed！！！")
 	} else {
 		//fmt.Println("connect to redis OK!!!")
-		logger.Log.WithFields(logrus.Fields{
+		logger.LoggerCurrent().WithFields(logrus.Fields{
 			"method": "redis-auth-connect",
 		}).Infof("connect to " + config.AuthRedisConfig.Addr + " for redis is ok")
 	}
