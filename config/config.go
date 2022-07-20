@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"log"
 )
 
-type Config struct {
+/*type Config struct {
 	DbType, DbName, User, Password, Host, Port string
 }
 
@@ -34,9 +33,9 @@ var AuthRedisConfig RedisConfig
 
 var LogStashConfig LogConfig
 
-var SwaggerConfig Swagger
+var SwaggerConfig Swagger*/
 
-func init() {
+func NewConfig() {
 
 	// 预设命令行参数
 	// 运行模式，用来指定运行的配置文件
@@ -57,7 +56,7 @@ func init() {
 		viper.SetConfigName("config_test")
 	default:
 		// 默认为开发环境的配置
-		viper.SetConfigName("config_dev")
+		viper.SetConfigName("config")
 	}
 	viper.SetConfigType("yaml") // REQUIRED if the config file does not have the extension in the name
 	viper.AddConfigPath(".")
@@ -71,31 +70,31 @@ func init() {
 	}
 
 	// 设置 Cloud 配置
-	if convertErr := viper.Sub("db").Sub("cloud").Unmarshal(&DbConfig); convertErr != nil {
-		panic(fmt.Errorf("Convert config value error : %s \n", convertErr))
-	} else {
-		log.Printf("connect to %s for Cloud", DbConfig.Host)
-		log.Printf("Convert Cloud config Ok !")
-	}
+	/*	if convertErr := viper.Sub("db").Sub("cloud").Unmarshal(&DbConfig); convertErr != nil {
+			panic(fmt.Errorf("Convert config value error : %s \n", convertErr))
+		} else {
+			log.Printf("connect to %s for Cloud", DbConfig.Host)
+			log.Printf("Convert Cloud config Ok !")
+		}*/
 
 	// 设置 redis 配置
-	if convertErr := viper.Sub("redis").Unmarshal(&AuthRedisConfig); convertErr != nil {
-		panic(fmt.Errorf("Convert redis config value error : %s \n", convertErr))
-	} else {
-		log.Printf("Convert redis config Ok !")
-	}
+	/*	if convertErr := viper.Sub("redis").Unmarshal(&AuthRedisConfig); convertErr != nil {
+			panic(fmt.Errorf("Convert redis config value error : %s \n", convertErr))
+		} else {
+			log.Printf("Convert redis config Ok !")
+		}*/
 
 	// 设置 log 配置
-	if convertErr := viper.Sub("log").Unmarshal(&LogStashConfig); convertErr != nil {
-		panic(fmt.Errorf("Convert log config value error : %s \n", convertErr))
-	} else {
-		log.Printf("Convert log config Ok !")
-	}
+	/*	if convertErr := viper.Sub("log").Unmarshal(&LogStashConfig); convertErr != nil {
+			panic(fmt.Errorf("Convert log config value error : %s \n", convertErr))
+		} else {
+			log.Printf("Convert log config Ok !")
+		}*/
 
 	//swagger配置
-	if convertErr := viper.Sub("swagger").Unmarshal(&SwaggerConfig); convertErr != nil {
-		panic(fmt.Errorf("Convert swagger config value error : %s \n", convertErr))
-	} else {
-		log.Printf("Convert swagger config Ok !")
-	}
+	/*	if convertErr := viper.Sub("swagger").Unmarshal(&SwaggerConfig); convertErr != nil {
+			panic(fmt.Errorf("Convert swagger config value error : %s \n", convertErr))
+		} else {
+			log.Printf("Convert swagger config Ok !")
+		}*/
 }
