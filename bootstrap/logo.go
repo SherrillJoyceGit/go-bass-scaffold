@@ -14,8 +14,8 @@ const (
 	cReset   = "\u001b[0m"
 )
 
-// InitApplication 初始化应用常量
-func initApplication() {
+// renderBassIcon 渲染 Bass Icon
+func renderBassIcon() {
 	fmt.Print(`
 -----------------------------------------------
  ` + cBlue + `o` + cReset + `
@@ -33,4 +33,9 @@ func initApplication() {
 ================================================
 
 `)
+}
+
+// ShowBass 显示 Bass Icon
+func ShowBass() {
+	renderBassIcon()
 }
