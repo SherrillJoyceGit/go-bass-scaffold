@@ -1,10 +1,10 @@
 package logger
 
 import (
-	"github.com/SherrillJoyceGit/go-bass-scaffold/config"
 	logrustash "github.com/bshuster-repo/logrus-logstash-hook"
 	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
+	"log"
 	"net"
 	"strings"
 	"time"
@@ -12,8 +12,7 @@ import (
 
 var currentLog *logrus.Logger
 
-// 返回当前的日志记录器，默认为LogrusLogger
-func LoggerCurrent() *logrus.Logger {
+func CurrentLogger() *logrus.Logger {
 	if currentLog == nil {
 		NewLogrusLogger()
 	}
@@ -23,40 +22,46 @@ func LoggerCurrent() *logrus.Logger {
 
 func NewLogrusLogger() fiber.Handler {
 
+	cfg, err := getCurrentConfig()
+
+	if err == nil {
+		log.Fatal(2, "Fail to get lgs config: %v", err)
+	}
+
 	// Set variables
 	var (
 		errHandler fiber.ErrorHandler
 	)
 
-	log := logrus.New()
+	lgs := logrus.New()
 
 	// 设置等级，可配置
-	log.SetLevel(logrus.DebugLevel)
+	lgs.SetLevel(logrus.DebugLevel)
 
 	// 设置时间格式，可配置
-	log.SetFormatter(&logrus.JSONFormatter{
+	lgs.SetFormatter(&logrus.JSONFormatter{
 		TimestampFormat: "2006-01-02 15:04:05.000",
 	})
 
 	// 连接，从配置文件获取
-	conn, err := net.Dial(config.LogStashConfig.Net, config.LogStashConfig.Host)
+	conn, err := net.Dial(string(cfg.Network), cfg.Host)
 	if err != nil {
-		log.Fatal(err)
+		lgs.Fatal(err)
 	}
 
 	// 从配置文件获取服务名 serviceId
 	hook := logrustash.New(conn, logrustash.DefaultFormatter(logrus.Fields{
-		"type":      "logrus",
-		"serviceId": config.LogStashConfig.ServiceId,
+		"type":      string(cfg.LogType),
+		"serviceId": cfg.ServiceId,
 	}))
 
 	// 记录连接情况日志
-	log.Hooks.Add(hook)
-	log.WithFields(logrus.Fields{
-		"method": "log-logstash-connect",
-	}).Infof("connect to " + config.LogStashConfig.Host + " for logstash is ok")
+	lgs.Hooks.Add(hook)
+	lgs.WithFields(logrus.Fields{
+		"method": "lgs-logstash-connect",
+	}).Infof("connect to " + cfg.Host + " for logstash is ok")
 
-	currentLog = log
+	currentLog = lgs
 	// 默认记录出入参，并限定业务接口
 	return func(c *fiber.Ctx) error {
 		// 请求开始时间
