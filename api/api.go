@@ -19,8 +19,7 @@ func InitRestApi() *fiber.App {
 	//app.Use(middle.LoggerToLogstash())
 
 	app.Use(recover.New())
-
-	app = controller.InitController(app, &controller.FishController{})
+	app = controller.InitController(app, &controller.FishController{controller.Controller{"V1"}})
 	//app.Get("/fish/ping", fishController.Ping())
 
 	return app
