@@ -6,7 +6,6 @@ import (
 )
 
 func main() {
-
 	app := api.InitRestApi()
 	bootstrap.BeGraceful(app)
 }

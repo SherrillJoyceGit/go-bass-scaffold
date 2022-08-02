@@ -1,6 +1,6 @@
 module github.com/SherrillJoyceGit/go-bass-scaffold
 
-go 1.15
+go 1.18
 
 require (
 	github.com/bshuster-repo/logrus-logstash-hook v1.0.2
