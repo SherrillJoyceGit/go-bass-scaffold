@@ -89,3 +89,26 @@ func NewConfig() {
 			log.Printf("Convert swagger config Ok !")
 		}*/
 }
+
+func NewViper() *viper.Viper {
+	// 预设命令行参数
+	// 运行模式，用来指定运行的配置文件
+	pflag.String("configName", "config", "set config file name, only for .yaml file now")
+	// 运行端口
+	pflag.Parse()
+	_ = viper.BindPFlags(pflag.CommandLine)
+	fn := viper.GetString("configName")
+	viper.SetConfigName(fn)
+	viper.SetConfigType("yaml") // REQUIRED if the config file does not have the extension in the name
+	viper.AddConfigPath(".")
+
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			panic(fmt.Errorf("Fatal error config file: %s \n", err))
+		} else {
+			panic(fmt.Errorf("Unexpected error : %s \n", err))
+		}
+	}
+
+	return viper.GetViper()
+}

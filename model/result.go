@@ -1,6 +1,6 @@
 package model
 
-type CodeName struct {
-	Code string `json:"code"` //代码
-	Name string `json:"name"` //字段名
+type Fish struct {
+	FishName string `json:"fishName"`
+	Feeling  string `json:"feeling"`
 }
