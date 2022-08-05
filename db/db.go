@@ -2,44 +2,31 @@ package db
 
 import (
 	"fmt"
-	"github.com/SherrillJoyceGit/go-bass-scaffold/middle/logger"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/sirupsen/logrus"
 	"log"
 )
 
-var db *gorm.DB
-
-func NewDbAccess() (*gorm.DB, error) {
+func NewDbAccess(cfg *Config) (*gorm.DB, error) {
 	var (
-		err                                        error
-		dbType, dbName, user, password, host, port string
+		err                                            error
+		dbType, dbName, userName, password, host, port string
 	)
-
-	//section, err := setting.Cfg.GetSection("database")
-	cfg, err := getCurrentConfig()
-	if err == nil {
-		//log.Fatal(2, "Fail to get section 'database': %v", err)
-		logger.CurrentLogger().Fatal("Fail to get section 'database': " + err.Error())
-	}
 
 	dbType = cfg.DbType
 	dbName = cfg.DbName
-	user = cfg.Username
+	userName = cfg.UserName
 	password = cfg.Password
 	host = cfg.Host
 	port = cfg.Port
-	ds := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", host, port, user, dbName, password)
-	//jdbc:postgresql://10.10.76.215:5432/message?stringtype=unspecified
-	//db, err := gorm.Open("postgres", "host=myhost port=myport user=gorm dbname=gorm password=mypassword")
-	db, err = gorm.Open(dbType, ds)
+	ds := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", host, port, userName, dbName, password)
+	db, err := gorm.Open(dbType, ds)
 
 	if err != nil {
-		logger.CurrentLogger().WithFields(logrus.Fields{
-			"method": "cloud-connect",
-		}).Panicln("connect to " + cfg.Host + " failed,err: " + err.Error())
-
+		/*		logger.CurrentLogger().WithFields(logrus.Fields{
+				"method": "cloud-connect",
+			}).Panicln("connect to " + cfg.Host + " failed,err: " + err.Error())*/
+		log.Printf("connect to " + cfg.Host + " failed,err: " + err.Error())
 		log.Panicln(err)
 	}
 
@@ -48,13 +35,13 @@ func NewDbAccess() (*gorm.DB, error) {
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
 
-	logger.CurrentLogger().WithFields(logrus.Fields{
+	/*	logger.CurrentLogger().WithFields(logrus.Fields{
 		"method": "db-cloud-connect",
-	}).Infof("connect to " + cfg.Host + " for " + cfg.DbName + " is ok")
-
+	}).Infof("connect to " + cfg.Host + " for " + cfg.DbName + " is ok")*/
+	log.Printf("connecting to " + cfg.Host + " for " + cfg.DbName + " is successful")
 	return db, nil
 }
 
-func CloseCloudDB() {
+func CloseCloudDB(db *gorm.DB) {
 	defer db.Close()
 }

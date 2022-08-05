@@ -2,10 +2,8 @@ package config
 
 import (
 	"fmt"
-	"github.com/SherrillJoyceGit/go-bass-scaffold/db"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"log"
 )
 
 /*type Config struct {
@@ -38,11 +36,11 @@ var LogStashConfig LogConfig
 var SwaggerConfig Swagger*/
 
 // NewConfig 根据yaml配置文件不同段落的存在情况，进行配置注入
-func NewConfig() {
+//func NewConfig() {
 
-	// 预设命令行参数
-	// 运行模式，用来指定运行的配置文件
-	pflag.String("configName", "config", "set config file name, only for .yaml file now")
+// 预设命令行参数
+// 运行模式，用来指定运行的配置文件
+/*	pflag.String("configName", "config", "set config file name, only for .yaml file now")
 	// 运行端口
 	//pflag.Int("port", 8090, "set the port app run on")
 	pflag.Parse()
@@ -66,29 +64,29 @@ func NewConfig() {
 	} else {
 		log.Printf("connect to %s for db", db.CurrentConfig.Host)
 		log.Printf("Convert db config Ok !")
-	}
+	}*/
 
-	// 设置 redis 配置
-	/*	if convertErr := viper.Sub("redis").Unmarshal(&AuthRedisConfig); convertErr != nil {
-			panic(fmt.Errorf("Convert redis config value error : %s \n", convertErr))
-		} else {
-			log.Printf("Convert redis config Ok !")
-		}*/
+// 设置 redis 配置
+/*	if convertErr := viper.Sub("redis").Unmarshal(&AuthRedisConfig); convertErr != nil {
+		panic(fmt.Errorf("Convert redis config value error : %s \n", convertErr))
+	} else {
+		log.Printf("Convert redis config Ok !")
+	}*/
 
-	// 设置 log 配置
-	/*	if convertErr := viper.Sub("log").Unmarshal(&LogStashConfig); convertErr != nil {
-			panic(fmt.Errorf("Convert log config value error : %s \n", convertErr))
-		} else {
-			log.Printf("Convert log config Ok !")
-		}*/
+// 设置 log 配置
+/*	if convertErr := viper.Sub("log").Unmarshal(&LogStashConfig); convertErr != nil {
+		panic(fmt.Errorf("Convert log config value error : %s \n", convertErr))
+	} else {
+		log.Printf("Convert log config Ok !")
+	}*/
 
-	//swagger配置
-	/*	if convertErr := viper.Sub("swagger").Unmarshal(&SwaggerConfig); convertErr != nil {
-			panic(fmt.Errorf("Convert swagger config value error : %s \n", convertErr))
-		} else {
-			log.Printf("Convert swagger config Ok !")
-		}*/
-}
+//swagger配置
+/*	if convertErr := viper.Sub("swagger").Unmarshal(&SwaggerConfig); convertErr != nil {
+		panic(fmt.Errorf("Convert swagger config value error : %s \n", convertErr))
+	} else {
+		log.Printf("Convert swagger config Ok !")
+	}*/
+//}
 
 func NewViper() *viper.Viper {
 	// 预设命令行参数
