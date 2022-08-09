@@ -33,13 +33,13 @@ func getCurrentConfig() (*Config, error) {
 	}
 }*/
 
-func NewFileConfig(vp *viper.Viper) (*Config, error) {
+func NewFileConfig(vp *viper.Viper) *Config {
 	cfg := new(Config)
 	if convertErr := vp.Sub("db").Unmarshal(&cfg); convertErr != nil {
 		panic(fmt.Errorf("Convert database config from config file  error : %s \n", convertErr))
 	} else {
 		log.Printf("Convert database config from config file successfully !")
-		return cfg, nil
+		return cfg
 	}
 
 }
