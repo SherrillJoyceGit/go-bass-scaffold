@@ -17,7 +17,7 @@ func main() {
 	container, err := BuildContainer()
 
 	// construct database connection
-	err = container.Invoke(db.NewDbAccess)
+	err = container.Invoke(db.NewPostgresDb)
 
 	// construct controller
 	err = container.Invoke(controller.NewFishController)
