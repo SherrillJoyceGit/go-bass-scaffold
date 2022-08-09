@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-func NewDbAccess(cfg *Config) (*gorm.DB, error) {
+func NewDbAccess(cfg *Config) *gorm.DB {
 	var (
 		err                                            error
 		dbType, dbName, userName, password, host, port string
@@ -39,7 +39,7 @@ func NewDbAccess(cfg *Config) (*gorm.DB, error) {
 		"method": "db-cloud-connect",
 	}).Infof("connect to " + cfg.Host + " for " + cfg.DbName + " is ok")*/
 	log.Printf("connecting to " + cfg.Host + " for " + cfg.DbName + " is successful")
-	return db, nil
+	return db
 }
 
 func CloseCloudDB(db *gorm.DB) {
