@@ -35,29 +35,18 @@ var LogStashConfig LogConfig
 
 var SwaggerConfig Swagger*/
 
-func NewConfig() {
+// NewConfig 根据yaml配置文件不同段落的存在情况，进行配置注入
+//func NewConfig() {
 
-	// 预设命令行参数
-	// 运行模式，用来指定运行的配置文件
-	pflag.String("mode", "dev", "set config mode")
+// 预设命令行参数
+// 运行模式，用来指定运行的配置文件
+/*	pflag.String("configName", "config", "set config file name, only for .yaml file now")
 	// 运行端口
-	pflag.Int("port", 8090, "set the port app run on")
-	// gin运行模式
-	pflag.String("ginMode", "release", "set the gin mode to run")
+	//pflag.Int("port", 8090, "set the port app run on")
 	pflag.Parse()
 	_ = viper.BindPFlags(pflag.CommandLine)
-	mode := viper.GetString("mode")
-	switch mode {
-	case "dev":
-		viper.SetConfigName("config_dev")
-	case "release":
-		viper.SetConfigName("config_release")
-	case "test":
-		viper.SetConfigName("config_test")
-	default:
-		// 默认为开发环境的配置
-		viper.SetConfigName("config")
-	}
+	fn := viper.GetString("configName")
+	viper.SetConfigName(fn)
 	viper.SetConfigType("yaml") // REQUIRED if the config file does not have the extension in the name
 	viper.AddConfigPath(".")
 
@@ -69,32 +58,55 @@ func NewConfig() {
 		}
 	}
 
-	// 设置 Cloud 配置
-	/*	if convertErr := viper.Sub("db").Sub("cloud").Unmarshal(&DbConfig); convertErr != nil {
-			panic(fmt.Errorf("Convert config value error : %s \n", convertErr))
-		} else {
-			log.Printf("connect to %s for Cloud", DbConfig.Host)
-			log.Printf("Convert Cloud config Ok !")
-		}*/
+	// 设置 db 配置
+	if convertErr := viper.Sub("db").Unmarshal(&db.CurrentConfig); convertErr != nil {
+		panic(fmt.Errorf("Convert config value error : %s \n", convertErr))
+	} else {
+		log.Printf("connect to %s for db", db.CurrentConfig.Host)
+		log.Printf("Convert db config Ok !")
+	}*/
 
-	// 设置 redis 配置
-	/*	if convertErr := viper.Sub("redis").Unmarshal(&AuthRedisConfig); convertErr != nil {
-			panic(fmt.Errorf("Convert redis config value error : %s \n", convertErr))
-		} else {
-			log.Printf("Convert redis config Ok !")
-		}*/
+// 设置 redis 配置
+/*	if convertErr := viper.Sub("redis").Unmarshal(&AuthRedisConfig); convertErr != nil {
+		panic(fmt.Errorf("Convert redis config value error : %s \n", convertErr))
+	} else {
+		log.Printf("Convert redis config Ok !")
+	}*/
 
-	// 设置 log 配置
-	/*	if convertErr := viper.Sub("log").Unmarshal(&LogStashConfig); convertErr != nil {
-			panic(fmt.Errorf("Convert log config value error : %s \n", convertErr))
-		} else {
-			log.Printf("Convert log config Ok !")
-		}*/
+// 设置 log 配置
+/*	if convertErr := viper.Sub("log").Unmarshal(&LogStashConfig); convertErr != nil {
+		panic(fmt.Errorf("Convert log config value error : %s \n", convertErr))
+	} else {
+		log.Printf("Convert log config Ok !")
+	}*/
 
-	//swagger配置
-	/*	if convertErr := viper.Sub("swagger").Unmarshal(&SwaggerConfig); convertErr != nil {
-			panic(fmt.Errorf("Convert swagger config value error : %s \n", convertErr))
+//swagger配置
+/*	if convertErr := viper.Sub("swagger").Unmarshal(&SwaggerConfig); convertErr != nil {
+		panic(fmt.Errorf("Convert swagger config value error : %s \n", convertErr))
+	} else {
+		log.Printf("Convert swagger config Ok !")
+	}*/
+//}
+
+func NewViper() *viper.Viper {
+	// 预设命令行参数
+	// 运行模式，用来指定运行的配置文件
+	pflag.String("configName", "config", "set config file name, only for .yaml file now")
+	// 运行端口
+	pflag.Parse()
+	_ = viper.BindPFlags(pflag.CommandLine)
+	fn := viper.GetString("configName")
+	viper.SetConfigName(fn)
+	viper.SetConfigType("yaml") // REQUIRED if the config file does not have the extension in the name
+	viper.AddConfigPath(".")
+
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			panic(fmt.Errorf("Fatal error config file: %s \n", err))
 		} else {
-			log.Printf("Convert swagger config Ok !")
-		}*/
+			panic(fmt.Errorf("Unexpected error : %s \n", err))
+		}
+	}
+
+	return viper.GetViper()
 }
