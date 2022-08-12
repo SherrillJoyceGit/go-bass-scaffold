@@ -8,14 +8,22 @@ import (
 )
 
 type FishController struct {
-	dig.In
-	fishDao *dao.FishDao
-	app     *fiber.App
+	Controller
 }
 
 func (b *FishController) Ping() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
-		return ctx.SendString("Get a fish !~")
+		return ctx.SendString("ping a fish !~")
+	}
+}
+func (b *FishController) GetPing() fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		return ctx.SendString("GetPing a fish !~")
+	}
+}
+func (b *FishController) PostPing() fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		return ctx.SendString("PostPing a fish !~")
 	}
 }
 
